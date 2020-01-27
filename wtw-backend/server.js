@@ -1,7 +1,22 @@
-'use strict';
-
+//'use strict';
+const router = require('./routes');
+const mongoose =require('mongoose');
 const express = require('express');
-const app = express();
+const bodyParser = require('body-parser');
+var app = express();
+
+const connections = [];
+
+//mongoose setup
+mongoose.Promise = Promise;
+mongoose.connect('mongodb://localhost/pfetest', { useNewUrlParser: true });
+mongoose.connection.on('error', () => {
+    throw new Error(`unable to connect to database`);
+});
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/',router);
 
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
@@ -9,11 +24,6 @@ const PORT = 4001;
 server.listen(PORT);
 
 console.log('Server is running');
-
-const bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({ extended: true }));
-
-const connections = [];
 
 io.sockets.on('connection',(socket) => {
    connections.push(socket);
@@ -39,3 +49,6 @@ app.get('/angle',(req,res)=>{
     io.sockets.emit('nouvel angle', {angle: req.query.value});
     res.json({success:"ok"});
 });
+
+
+module.exports = app;
