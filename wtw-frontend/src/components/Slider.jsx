@@ -1,5 +1,7 @@
 import React from "react";
 import { Slider } from "shards-react";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'shards-ui/dist/css/shards.min.css';
 import MyContext from "./MyContext";
 
 export default class SliderCustomRange extends React.Component {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Breadcrumb, BreadcrumbItem } from 'shards-react';
+import { Container, Row, Breadcrumb, BreadcrumbItem } from 'react-bootstrap';
 import SliderCustomRange from './Slider';
 import MyContext from './MyContext'
 
@@ -16,8 +16,8 @@ class Config extends Component {
         return (
             <Container>
                 <Row>
-                    <Breadcrumb style={{ width: '100%' }}>
-                        <BreadcrumbItem>
+                    <Breadcrumb style={{ width: '100%' }} className="mt-4">
+                        <BreadcrumbItem active>
                             Réglages des capteurs
                         </BreadcrumbItem>
                     </Breadcrumb>

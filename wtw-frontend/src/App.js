@@ -1,8 +1,8 @@
 import React from 'react';
-import { Navbar, NavbarBrand, Nav, NavLink } from "shards-react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "shards-ui/dist/css/shards.min.css"
-import { NavLink as RouterNavLink } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
+import { NavLink } from 'react-router-dom';
 import Routes from './routes';
 import MyProvider from "./components/MyProvider"
 import './App.css'
@@ -10,18 +10,25 @@ import './App.css'
 function App() {
   return (
     <MyProvider>
-      <Navbar>
-        <NavbarBrand>
-          <h4>Walk This Way</h4>
-        </NavbarBrand>
-        <Nav>
-          <NavLink>
-            <RouterNavLink exact to="/" className="nav-link">Metrics live</RouterNavLink>
-          </NavLink>
-          <NavLink>
-            <RouterNavLink exact to="/config" className="nav-link">Configuration</RouterNavLink>
-          </NavLink>
-        </Nav>
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Brand>Walk this Way</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto"></Nav>
+          <Nav>
+            <Nav.Link>
+              <NavLink exact to="/" className="nav-link">Metrics live</NavLink>
+            </Nav.Link>
+
+            <Nav.Link>
+              <NavLink exact to="/config" className="nav-link">Configuration</NavLink>
+            </Nav.Link>
+
+            <Nav.Link>
+              <NavLink exact to="/users" className="nav-link">Patients</NavLink>
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
       </Navbar>
       <Routes />
     </MyProvider>

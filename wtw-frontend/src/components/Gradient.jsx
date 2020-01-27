@@ -9,27 +9,45 @@ class Gradient extends Component {
         this.state = {
             options: {
                 chart: {
-                    height: 350,
                     type: 'radialBar',
                 },
                 plotOptions: {
                     radialBar: {
-                        startAngle: -140,
-                        endAngle: 140,
+                        dataLabels: {
+                            name: {
+                                show: true,
+                                fontSize: '20px'
+                            },
+                            value: {
+                                show: false,
+                            }
+                        },
+                        startAngle: -130,
+                        endAngle: 130,
                         hollow: {
-                            size: '70%',
+                            size: '75%',
                         }
                     },
                 },
                 labels: this.props.labels,
+                fill: {
+                    colors: [function({ value, seriesIndex, w }) {
+                      if(value > 75) {
+                          return '#c4183c'
+                      } else {
+                          return '#008ffb'
+                      }
+                    }]
+                  }           
             },
         }
     }
-
+    
     render() {
         return (
             <div className="gradient">
-                <Chart options={this.state.options} series={this.props.series} type="radialBar" height="350" />
+                <Chart options={this.state.options} series={this.props.series} type="radialBar" height="320" />
+                <h3 style={{marginTop: -50}}>{this.props.value}</h3>
             </div>
         );
     }
