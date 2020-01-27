@@ -11,9 +11,10 @@ services:
     container_name: 'wtw-frontend'
     ports:
       - "80:80"
-
+      
   database:
     image: mongo
-    container_name: 'mongo-container'
-
+    container_name: 'wtw-database'
+    ports:
+      - "27019:27019"
       
