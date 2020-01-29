@@ -3,6 +3,8 @@ services:
   back:
     image: cake1234/wtw-backend
     container_name: 'wtw-backend'
+    depends_on:
+      - "database"
     restart: always
     ports: 
       - 4001:4001
