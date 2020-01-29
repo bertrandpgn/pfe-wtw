@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import Gradient from "./Gradient"
 import socketIOClient from "socket.io-client"
 import MyContext from './MyContext';
@@ -13,6 +13,7 @@ class Home extends Component {
             angle: 0,
             angle_max: context.state.angle_max,
             session: context.state.session,
+            formDisplay: false,
         };
     }
 
@@ -36,6 +37,32 @@ class Home extends Component {
         })
     }
     
+    formPatient() {
+        return (
+            <Row className="mt-4">
+                <Col md={{ size:10, offset:1}}>
+                    <Form>
+                        <Form.Group controlId="formPatient">
+                                    <Row>
+                                        <Col md={6}>
+                                            <Form.Label>Ressenti patient</Form.Label>
+                                            <Form.Control type="text" />
+                                        </Col>
+                                        <Col md={6}>
+                                            <Form.Label>Commentaires</Form.Label>
+                                            <Form.Control type="text" />
+                                        </Col>
+                                    </Row>
+                        </Form.Group>
+                        <Button variant="primary" type="submit" onClick={() => this.setState({formDisplay: false})}>
+                                    Enregistrer
+                                </Button>
+                    </Form>
+                </Col>
+            </Row>
+        );
+    }
+
     render() {
         return (
             <Container>
@@ -51,10 +78,12 @@ class Home extends Component {
                         <h4 className="mt-4">Limite: {this.state.angle_max}°</h4>
                     </Col>
                 </Row>
-                <Row className="flex-row-reverse mt-4">
-                    <br />
-                    {this.state.session ? <Button>Enregistrer session</Button> : null}
+                <Row className="mt-4">
+                    <Col className="mt-4 text-center">
+                        {this.state.session ? <Button onClick={() => this.setState({formDisplay: true})}>Enregistrer session</Button> : null}
+                    </Col>
                 </Row>
+                {this.state.formDisplay ? this.formPatient() : null}
             </Container>
         );
     }
