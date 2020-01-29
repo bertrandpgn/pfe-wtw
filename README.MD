@@ -2,6 +2,7 @@
 
 images docker : cake1234/wtw-frontend - cake1234/wtw-backend - mongo
 
-env variables for docker-compose in .env, run `docker-compose up -d`
+env variables for docker-compose in .env
+! Make sure to match $DOMAIN in .env and REACT_APP_URL in wtw-frontend/.env
 
-git only branch 'prod' in virtual machine
+git checkout prod in virtual machine and run `docker-compose up -d`
