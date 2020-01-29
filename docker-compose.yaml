@@ -5,23 +5,19 @@ services:
     container_name: 'wtw-backend'
     restart: always
     ports: 
-      - ${BACK_PORT}:${BACK_PORT}
-    environment: 
-      - BACK_PORT=${BACK_PORT}
-      - MONGO_PORT=${MONGO_PORT}
-      - DOMAIN=${DOMAIN}
+      - 4001:4001
   
   front:
     image: cake1234/wtw-frontend
     container_name: 'wtw-frontend'
     restart: always
     ports:
-      - ${FRONT_PORT}:${FRONT_PORT}
+      - 80:80
       
   database:
     image: mongo
     container_name: 'wtw-mongodb'
     restart: always
     ports:
-      - ${MONGO_PORT}:${MONGO_PORT}
+      - 27017:27017
       
