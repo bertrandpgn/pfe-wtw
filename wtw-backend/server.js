@@ -6,10 +6,12 @@ const bodyParser = require('body-parser');
 var app = express();
 
 const connections = [];
+const DOMAIN = process.env.DOMAIN;
+const MONGO_PORT = process.env.MONGO_PORT;
 
 //mongoose setup
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://localhost/pfetest', { useNewUrlParser: true });
+mongoose.connect(`mongodb://${DOMAIN}:${MONGO_PORT}`, { useNewUrlParser: true });
 mongoose.connection.on('error', () => {
     throw new Error(`unable to connect to database`);
 });
@@ -20,8 +22,9 @@ app.use('/',router);
 
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
-const PORT = 4001;
-server.listen(PORT);
+const BACK_PORT = process.env.BACK_PORT;
+
+server.listen(BACK_PORT);
 
 console.log('Server is running');
 
