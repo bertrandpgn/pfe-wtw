@@ -6,12 +6,11 @@ const bodyParser = require('body-parser');
 var app = express();
 
 const connections = [];
-const DOMAIN = 'http://wtw.francecentral.cloudapp.azure.com'
 const MONGO_PORT = '27017'
 const BACK_PORT = '4001';
 
 mongoose.Promise = Promise;
-mongoose.connect(`${DOMAIN}:${MONGO_PORT}`, { useNewUrlParser: true });
+mongoose.connect(`mongodb://localhost:${MONGO_PORT}`, { useNewUrlParser: true });
 mongoose.connection.on('error', () => {
     throw new Error(`unable to connect to database`);
 });
