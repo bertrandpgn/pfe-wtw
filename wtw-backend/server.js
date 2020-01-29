@@ -8,9 +8,10 @@ var app = express();
 const connections = [];
 const MONGO_PORT = '27017'
 const BACK_PORT = '4001';
+const DOMAIN = 'wtw.francecentral.cloudapp.azure.com';
 
 mongoose.Promise = Promise;
-mongoose.connect(`mongodb://localhost:${MONGO_PORT}`, { useNewUrlParser: true });
+mongoose.connect(`mongodb://${DOMAIN}:${MONGO_PORT}`, { useNewUrlParser: true });
 mongoose.connection.on('error', () => {
     throw new Error(`unable to connect to database`);
 });
