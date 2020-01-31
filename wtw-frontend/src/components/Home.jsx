@@ -42,7 +42,7 @@ class Home extends Component {
             <Row className="mt-4">
                 <Col md={{ size:10, offset:1}}>
                     <Form>
-                        <Form.Group controlId="formPatient">
+                        <Form.Group>
                                     <Row>
                                         <Col md={6}>
                                             <Form.Label>Ressenti patient</Form.Label>

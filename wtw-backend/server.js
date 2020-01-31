@@ -16,6 +16,12 @@ mongoose.connection.on('error', () => {
     throw new Error(`unable to connect to database`);
 });
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/',router);
@@ -37,7 +43,7 @@ io.sockets.on('connection',(socket) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('SocketIO backend for wtw w/mongo');
+    res.send('SocketIO backend for wtw w/mongo chibre');
  });
 
 app.get('/poids',(req,res)=>{

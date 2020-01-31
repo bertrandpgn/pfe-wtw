@@ -7,6 +7,7 @@ var router = express.Router();
 router.post('/api/user',userController.create);
 router.get('/api/user',userController.readAll);
 router.get('/api/user/:id',userController.readOne);
+router.delete('/api/user/:id',userController.delete);
 
 router.post('/api/session',sessionController.create);
 router.get('/api/session/:id',sessionController.readForOneUser);
