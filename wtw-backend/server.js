@@ -43,7 +43,7 @@ io.sockets.on('connection',(socket) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('SocketIO backend for wtw w/mongo chibre');
+    res.send('SocketIO backend for wtw w/mongo');
  });
 
 app.get('/poids',(req,res)=>{
