@@ -21,9 +21,9 @@ class Users extends Component {
     componentDidMount = async () => {
         await api.getAllUsers().then(data => {
             console.log("data all users:" + data)
-            // this.setState({
-            //     patients: data.patients,
-            // })
+            this.setState({
+                patients: data.patients,
+            })
         })
     }
 
