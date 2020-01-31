@@ -20,10 +20,10 @@ class Users extends Component {
 
     componentDidMount = async () => {
         await api.getAllUsers().then(data => {
-            console.log(data)
-            this.setState({
-                patients: data.patients,
-            })
+            console.log("data all users:" + data)
+            // this.setState({
+            //     patients: data.patients,
+            // })
         })
     }
 
@@ -51,7 +51,7 @@ class Users extends Component {
             prenom: this.state.prenom
         }
 
-        await api.insertMovie(payload).then(res => {
+        await api.getAllUsers(payload).then(res => {
             if (res.success) {
                 window.alert(res.msg)
                 this.setState({
@@ -87,24 +87,20 @@ class Users extends Component {
                 </Row>
                 <Accordion>
                     <Row className="mt-4 flex-row-reverse">
-                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                            <Button className="mr-2" variant="outline-primary">+ Ajout patient</Button>
-                        </Accordion.Toggle>
+                        <Accordion.Toggle as={Button} variant="outline-primary" eventKey="0">+ Ajout patient</Accordion.Toggle>
                     </Row>
-
                     <Row>
-
                         <Accordion.Collapse eventKey="0" className="w-100">
                             <Form>
                                 <Form.Group>
                                     <Row>
                                         <Col md={6}>
                                             <Form.Label>Nom</Form.Label>
-                                            <Form.Control type="name" onChange={ (e) => this.setState({ nom: e.target.value})}/>
+                                            <Form.Control type="name" onChange={(e) => this.setState({ nom: e.target.value })} />
                                         </Col>
                                         <Col md={6}>
                                             <Form.Label>Prénom</Form.Label>
-                                            <Form.Control type="name" onChange={ (e) => this.setState({ prenom: e.target.value})}/>
+                                            <Form.Control type="name" onChange={(e) => this.setState({ prenom: e.target.value })} />
                                         </Col>
                                     </Row>
 

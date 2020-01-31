@@ -16,17 +16,9 @@ function App() {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto"></Nav>
           <Nav>
-            <Nav.Link>
               <NavLink exact to="/" className="nav-link">Metrics live</NavLink>
-            </Nav.Link>
-
-            <Nav.Link>
               <NavLink exact to="/config" className="nav-link">Configuration</NavLink>
-            </Nav.Link>
-
-            <Nav.Link>
               <NavLink exact to="/users" className="nav-link">Patients</NavLink>
-            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

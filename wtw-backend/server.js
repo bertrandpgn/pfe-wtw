@@ -43,7 +43,7 @@ io.sockets.on('connection',(socket) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('SocketIO backend for wtw w/mongo');
+    res.send('Backend wtw v1.0.2' );
  });
 
 app.get('/poids',(req,res)=>{
