@@ -20,7 +20,7 @@ class MyProvider extends Component {
                     angle_max: angle
                 }),
                 updateSession: _patient => {
-                    _patient._id !== '' ? this.setState({ patient: _patient, session: true}) : this.setState({ patient: {}, session: false})
+                    _patient._id !== '' ? this.setState({ patient: _patient, session: true}) : this.setState({ patient: { _id: ''}, session: false})
                 },
             }}>
                 {this.props.children}
