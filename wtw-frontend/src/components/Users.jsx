@@ -33,6 +33,16 @@ class Users extends Component {
             <Container className="mt-4">
                 <h1>{this.state.patient.nom} {this.state.patient.prenom}</h1>
                 <p>Mes supers infos maggle</p>
+                <Row className="ml-auto">
+                    <Button variant="danger"
+                        onClick={() =>
+                            window.confirm("Voulez vous vraiment supprimer ce patient?") &&
+                            this.handleDeleteUser()
+                        }
+                    >
+                        Supprimer
+                    </Button>
+                </Row>
             </Container>
         )
     }
@@ -54,7 +64,7 @@ class Users extends Component {
         }
 
         await api.insertUser(qs.stringify(payload)).then(resp => {
-            if(resp.data.success){
+            if (resp.data.success) {
                 this.setState({
                     nom: '',
                     prenom: ''
@@ -62,6 +72,10 @@ class Users extends Component {
                 window.location.reload();
             } else alert(resp.data.msg)
         })
+    }
+
+    handleDeleteUser = async () => {
+        await api.deleteUser(this.state.patient._id)
     }
 
     render() {
@@ -84,8 +98,6 @@ class Users extends Component {
                     })}
 
                 </Row>
-
-                {this.state.patient.nom ? this.infoPatient() : null}
 
                 <Accordion>
                     <Row className="mt-4 flex-row-reverse">
@@ -112,9 +124,11 @@ class Users extends Component {
                                 </Button>
                             </Form>
                         </Accordion.Collapse>
-
                     </Row>
                 </Accordion>
+
+                {this.state.patient.nom ? this.infoPatient() : null}
+
             </Container>
         );
     }

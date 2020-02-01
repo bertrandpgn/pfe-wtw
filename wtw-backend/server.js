@@ -19,6 +19,8 @@ mongoose.connection.on('error', () => {
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Content-Type', 'application/json');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE');
     next();
   });
 
@@ -43,7 +45,7 @@ io.sockets.on('connection',(socket) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('Backend wtw v1.0.2' );
+    res.send('Backend wtw v1.0.3' );
  });
 
 app.get('/poids',(req,res)=>{
