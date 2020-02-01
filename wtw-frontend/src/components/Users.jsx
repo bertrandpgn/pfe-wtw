@@ -75,7 +75,7 @@ class Users extends Component {
     }
 
     handleDeleteUser = async () => {
-        await api.deleteUser(this.state.patient._id)
+        await api.deleteUser(this.state.patient._id).then(resp => {resp.data.success ? window.location.reload() : null})
     }
 
     render() {
