@@ -6,21 +6,21 @@ class MyProvider extends Component {
         poids_max: 40,
         angle_max: 180,
         session: false,
-        patient: [{ _id: ''}], // default id for 'no user' mode dashboard
+        patient: { _id: ''}, // default id for 'no user' mode dashboard
     }
 
     render() {
         return (
             <MyContext.Provider value={{
                 state: this.state,
-                updatePoids: (poids) => this.setState({
+                updatePoids: poids => this.setState({
                     poids_max: poids
                 }),
-                updateAngle: (angle) => this.setState({
+                updateAngle: angle => this.setState({
                     angle_max: angle
                 }),
-                updateSession: (_patient) => {
-                    _patient !== '' ? this.setState({ patient: _patient, session: true}) : this.setState({ patient: [], session: false})
+                updateSession: _patient => {
+                    _patient._id !== '' ? this.setState({ patient: _patient, session: true}) : this.setState({ patient: {}, session: false})
                 },
             }}>
                 {this.props.children}

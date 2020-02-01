@@ -69,7 +69,7 @@ class Users extends Component {
             <Container className="mt-4">
                 <Row>
                     <Button
-                        className={this.isActive([{ _id: '' }])} onClick={() => this.session([{ _id: '' }])}
+                        className={this.isActive({ _id: '' })} onClick={() => this.session({ _id: '' })}
                         variant="outline-secondary"
                     >
                         Sans patient
