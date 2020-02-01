@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Button, Row, Accordion, Form, Col } from "react-bootstrap";
 import MyContext from './MyContext';
 import api from '../api'
+import qs from 'querystring'
 
 class Users extends Component {
     constructor(props, context) {
@@ -11,38 +12,39 @@ class Users extends Component {
             patient: context.state.patient,
             patients: [],
             nom: '',
-            prenom: '',
+            prenom: ''
         }
         this.updateSession = context.updateSession.bind(this);
         this.isActive = this.isActive.bind(this);
         this.session = this.session.bind(this);
     }
 
-    componentDidMount = async () => {
-        await api.getAllUsers().then(data => {
-            console.log("data all users:" + data)
-            this.setState({
-                patients: data.patients,
-            })
-        })
+    isActive = value => {
+        return 'mr-3 mb-3 ' + ((value._id === this.state.patient._id) ? 'active' : 'default');
     }
 
-    isActive(value) {
-        return 'mr-2 ' + ((value === this.state.patient) ? 'active' : 'default');
+    session = user => {
+        this.updateSession(user)
+        this.setState({ patient: user })
     }
 
-    session(filter) {
-        this.updateSession(filter)
-        this.setState({ patient: filter })
-    }
-
-    infoPatient() {
+    infoPatient = () => {
         return (
-            <Container>
-                <h1>{this.state.patient}</h1>
+            <Container className="mt-4">
+                <h1>{this.state.patient.nom} {this.state.patient.prenom}</h1>
                 <p>Mes supers infos maggle</p>
             </Container>
         )
+    }
+
+    componentDidMount = async () => {
+        await api.getAllUsers().then(resp => {
+            resp.data.map(user =>
+                this.setState(prevState => ({
+                    patients: [...prevState.patients, user]
+                }))
+            )
+        })
     }
 
     handleInsertUser = async () => {
@@ -51,17 +53,14 @@ class Users extends Component {
             prenom: this.state.prenom
         }
 
-        await api.getAllUsers(payload).then(res => {
-            if (res.success) {
-                window.alert(res.msg)
+        await api.insertUser(qs.stringify(payload)).then(resp => {
+            if(resp.data.success){
                 this.setState({
                     nom: '',
-                    prenom: '',
+                    prenom: ''
                 })
-            }
-            else {
-                window.alert(res.msg)
-            }
+                window.location.reload();
+            } else alert(resp.data.msg)
         })
     }
 
@@ -70,24 +69,27 @@ class Users extends Component {
             <Container className="mt-4">
                 <Row>
                     <Button
-                        className={this.isActive('')} onClick={() => this.session('')}
+                        className={this.isActive([{ _id: '' }])} onClick={() => this.session([{ _id: '' }])}
                         variant="outline-secondary"
                     >
                         Sans patient
                     </Button>
 
-                    {this.state.patients.map((value) => {
+                    {this.state.patients.map(patient => {
                         return <Button
-                            className={this.isActive(value)} onClick={() => this.session(value)}
-                            variant="outline-primary"
-                        > {value}
+                            className={this.isActive(patient)} onClick={() => this.session(patient)}
+                            key={patient._id} variant="outline-primary"
+                        > {patient.nom} {patient.prenom}
                         </Button>
                     })}
 
                 </Row>
+
+                {this.state.patient.nom ? this.infoPatient() : null}
+
                 <Accordion>
                     <Row className="mt-4 flex-row-reverse">
-                        <Accordion.Toggle as={Button} variant="outline-primary" eventKey="0">+ Ajout patient</Accordion.Toggle>
+                        <Accordion.Toggle as={Button} variant="primary" eventKey="0">+ Ajout patient</Accordion.Toggle>
                     </Row>
                     <Row>
                         <Accordion.Collapse eventKey="0" className="w-100">
@@ -96,11 +98,11 @@ class Users extends Component {
                                     <Row>
                                         <Col md={6}>
                                             <Form.Label>Nom</Form.Label>
-                                            <Form.Control type="name" onChange={(e) => this.setState({ nom: e.target.value })} />
+                                            <Form.Control required type="name" onChange={(e) => this.setState({ nom: e.target.value })} />
                                         </Col>
                                         <Col md={6}>
                                             <Form.Label>Prénom</Form.Label>
-                                            <Form.Control type="name" onChange={(e) => this.setState({ prenom: e.target.value })} />
+                                            <Form.Control required type="name" onChange={(e) => this.setState({ prenom: e.target.value })} />
                                         </Col>
                                     </Row>
 
@@ -113,9 +115,6 @@ class Users extends Component {
 
                     </Row>
                 </Accordion>
-
-                {this.state.patient !== '' ? this.infoPatient() : null}
-
             </Container>
         );
     }

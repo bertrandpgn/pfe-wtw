@@ -6,7 +6,7 @@ class MyProvider extends Component {
         poids_max: 40,
         angle_max: 180,
         session: false,
-        patient: '',
+        patient: [{ _id: ''}], // default id for 'no user' mode dashboard
     }
 
     render() {
@@ -20,7 +20,7 @@ class MyProvider extends Component {
                     angle_max: angle
                 }),
                 updateSession: (_patient) => {
-                    _patient !== '' ? this.setState({ patient: _patient, session: true}) : this.setState({ patient: '', session: false})
+                    _patient !== '' ? this.setState({ patient: _patient, session: true}) : this.setState({ patient: [], session: false})
                 },
             }}>
                 {this.props.children}
