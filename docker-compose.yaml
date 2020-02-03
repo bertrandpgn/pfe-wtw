@@ -26,3 +26,6 @@ services:
     restart: always
     ports:
       - 80:80
+
+volumes:
+  - mongodbdata:/data/db
