@@ -3,6 +3,7 @@ import { Container, Button, Row, Accordion, Form, Col } from "react-bootstrap";
 import MyContext from './MyContext';
 import api from '../api'
 import qs from 'querystring'
+import LineChart from './LineChart'
 
 class Users extends Component {
     constructor(props, context) {
@@ -32,18 +33,48 @@ class Users extends Component {
         return (
             <Container className="mt-4">
                 <h1>{this.state.patient.nom} {this.state.patient.prenom}</h1>
-                <p>Mes supers infos maggle</p>
-                <Row className="ml-auto">
-                    <Button variant="danger"
+                <hr />
+                {this.state.patient ? this.sessionPatient() : null}
+                <Row className="mt-4 w-100">
+                    <Button variant="danger" className="ml-auto"
                         onClick={() =>
                             window.confirm("Voulez vous vraiment supprimer ce patient?") &&
                             this.handleDeleteUser()
                         }
                     >
-                        Supprimer
+                        Supprimer patient
                     </Button>
                 </Row>
             </Container>
+        )
+    }
+
+    sessionPatient = () => {
+        const options = {
+            chart: {
+                zoom: {
+                    enabled: false
+                }
+            },
+            xaxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai']
+            },
+            title: {
+                text: 'Sessions Louis Marquis',
+                align: 'left'
+            },
+        };
+
+        const series = [{
+            name: "Angle",
+            data: [90, 110, 120, 130, 140]
+        }]
+
+        return (
+            <Row className="w-100">
+                {/* TODO: map sessions */}
+                <LineChart series={series} options={options} />
+            </Row>
         )
     }
 
@@ -75,7 +106,7 @@ class Users extends Component {
     }
 
     handleDeleteUser = async () => {
-        await api.deleteUser(this.state.patient._id).then(resp => {resp.data.success ? window.location.reload() : alert(resp.data.msg)})
+        await api.deleteUser(this.state.patient._id).then(resp => { resp.data.success ? window.location.reload() : alert(resp.data.msg) })
     }
 
     render() {

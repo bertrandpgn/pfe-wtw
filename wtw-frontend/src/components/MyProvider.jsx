@@ -22,6 +22,9 @@ class MyProvider extends Component {
                 updateSession: _patient => {
                     _patient._id !== '' ? this.setState({ patient: _patient, session: true}) : this.setState({ patient: { _id: ''}, session: false})
                 },
+                getPatient: () => {
+                    return this.state.patient
+                }
             }}>
                 {this.props.children}
             </MyContext.Provider>

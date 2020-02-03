@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
-import Gradient from "./Gradient"
+import { Container, Row, Col, Button, Form, Badge } from "react-bootstrap";
+import GradientChart from "./GradientChart"
 import socketIOClient from "socket.io-client"
 import MyContext from './MyContext';
 
@@ -13,7 +13,7 @@ class Home extends Component {
             angle: 0,
             angle_max: context.state.angle_max,
             session: context.state.session,
-            patient: context.state.session,
+            patient: context.state.patient,
             formDisplay: false,
         };
     }
@@ -40,9 +40,8 @@ class Home extends Component {
     
     formPatient() {
         return (
-            <Row className="mt-4">
-                <Col md={{ size:10, offset:1}}>
-                    <Form>
+            <Row className="mt-4 w-100">
+                    <Form className="w-100">
                         <Form.Group>
                                     <Row>
                                         <Col md={6}>
@@ -59,7 +58,6 @@ class Home extends Component {
                                     Enregistrer
                                 </Button>
                     </Form>
-                </Col>
             </Row>
         );
     }
@@ -67,14 +65,18 @@ class Home extends Component {
     render() {
         return (
             <Container>
+                <Row className="w-100 mt-2">
+                    {this.state.session ? <Badge variant="light" className="ml-auto">{this.state.patient.nom} {this.state.patient.prenom}</Badge> : null}
+                    
+                </Row>
                 <Row>
                     <Col className="text-center">
-                        <Gradient series={[(this.state.poids / this.state.poids_max) * 100 - 5]} value={this.state.poids} labels={["Poids"]} />
+                        <GradientChart series={[(this.state.poids / this.state.poids_max) * 100 - 5]} value={this.state.poids} labels={["Poids"]} />
                         <br />
                         <h4 className="mt-4">Limite: {this.state.poids_max}kg</h4>
                     </Col>
                     <Col className="text-center">
-                        <Gradient series={[(this.state.angle / this.state.angle_max) * 100]} value={this.state.angle} labels={["Angle"]} />
+                        <GradientChart series={[(this.state.angle / this.state.angle_max) * 100]} value={this.state.angle} labels={["Angle"]} />
                         <br />
                         <h4 className="mt-4">Limite: {this.state.angle_max}°</h4>
                     </Col>
@@ -84,7 +86,6 @@ class Home extends Component {
                         {this.state.session ? <Button onClick={() => this.setState({formDisplay: true})}>Enregistrer session</Button> : null}
                     </Col>
                 </Row>
-                <h2>{this.state.patient.nom} {this.state.patient.prenom}</h2>
                 {this.state.formDisplay ? this.formPatient() : null}
             </Container>
         );
