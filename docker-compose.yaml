@@ -28,4 +28,4 @@ services:
       - 80:80
 
 volumes:
-  - mongodbdata:/data/db
+  mongodbdata:
