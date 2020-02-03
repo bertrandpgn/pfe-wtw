@@ -3,6 +3,8 @@ import { Container, Row, Col, Button, Form, Badge } from "react-bootstrap";
 import GradientChart from "./GradientChart"
 import socketIOClient from "socket.io-client"
 import MyContext from './MyContext';
+import qs from 'querystring';
+import api from '../api';
 
 class Home extends Component {
     constructor(props, context) {
@@ -15,6 +17,11 @@ class Home extends Component {
             session: context.state.session,
             patient: context.state.patient,
             formDisplay: false,
+            isRecording: false,
+            dataPoids: [],
+            dataAngle: [],
+            startTime: 0,
+            endTime: 0, 
         };
     }
 
@@ -24,8 +31,13 @@ class Home extends Component {
         socket.on('nouveau poids', (data) => {
             if ((data.poids / this.state.poids_max * 100) < 105) {
                 this.setState({
-                    poids: Math.round(data.poids),
+                    poids: Math.round(data.poids) ,
                 })
+                if( this.state.isRecording ){
+                    this.setState({
+                        dataPoids: this.state.dataPoids.concat([data.poids]),
+                    })
+                }
             }
         })
 
@@ -34,6 +46,11 @@ class Home extends Component {
                 this.setState({
                     angle: Math.round(data.angle),
                 })
+                if( this.state.isRecording ){
+                    this.setState({
+                        dataAngle: this.state.dataAngle.concat([data.angle]),
+                    })
+                }
             }
         })
     }
@@ -54,14 +71,49 @@ class Home extends Component {
                                         </Col>
                                     </Row>
                         </Form.Group>
-                        <Button variant="primary" type="submit" onClick={() => this.setState({formDisplay: false})}>
+                        <Button variant="primary" type="submit" onClick={() => this.stopSession()}>
                                     Enregistrer
                                 </Button>
                     </Form>
             </Row>
         );
     }
-
+    
+    startSession() {
+        this.setState({
+            formDisplay: true,
+            isRecording: true,
+            startTime: Date.now(),
+            dataAngle: [],
+            dataPoids: [],
+        })
+    }
+                    
+    stopSession = async (comKine,comPatient) =>  {
+        this.setState({
+            formDisplay: false,
+            isRecording: false,
+            endTime: Date.now(),
+        })
+        
+        const payload = {
+            appareil: "angle et poids",
+            debut: this.state.startTime,
+            fin: this.state.endTime,
+            commentaireKine : comKine,
+            commentairePatient : comPatient,
+            userId : this.state.patient._id,
+            data : this.state.dataPoids
+        }
+        
+        await api.insertSession(qs.stringify(payload)).then(resp => {
+            if (resp.data.success) {
+                window.location.reload();
+            } else alert(resp.data.msg)
+        })
+    }
+                      
+    
     render() {
         return (
             <Container>
@@ -83,7 +135,7 @@ class Home extends Component {
                 </Row>
                 <Row className="mt-4">
                     <Col className="mt-4 text-center">
-                        {this.state.session ? <Button onClick={() => this.setState({formDisplay: true})}>Enregistrer session</Button> : null}
+                        {this.state.session ? <Button onClick={()=>this.startSession()}>Enregistrer session</Button> : null}
                     </Col>
                 </Row>
                 {this.state.formDisplay ? this.formPatient() : null}
