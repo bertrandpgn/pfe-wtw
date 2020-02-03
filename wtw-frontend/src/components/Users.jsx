@@ -67,7 +67,7 @@ class Users extends Component {
 
         const series = [{
             name: "Angle",
-            data: [90, 110, 120, 130, 140]
+            data: [50, 60, 70, 80, 85]
         }]
 
         return (
