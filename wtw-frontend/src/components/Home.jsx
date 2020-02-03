@@ -13,6 +13,7 @@ class Home extends Component {
             angle: 0,
             angle_max: context.state.angle_max,
             session: context.state.session,
+            patient: context.state.session,
             formDisplay: false,
         };
     }
@@ -83,6 +84,7 @@ class Home extends Component {
                         {this.state.session ? <Button onClick={() => this.setState({formDisplay: true})}>Enregistrer session</Button> : null}
                     </Col>
                 </Row>
+                <h2>{this.state.patient.nom} {this.state.patient.prenom}</h2>
                 {this.state.formDisplay ? this.formPatient() : null}
             </Container>
         );
