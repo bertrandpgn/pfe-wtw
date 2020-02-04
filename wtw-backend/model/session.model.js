@@ -15,7 +15,8 @@ const SessionSchema = new Schema({
         type: Date,
         required: true
     },
-    data:[Number],
+    dataAngle:[Number],
+    dataPoids:[Number],
     userId: {
         type: String
     },

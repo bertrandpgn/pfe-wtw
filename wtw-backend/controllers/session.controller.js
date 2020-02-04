@@ -16,7 +16,8 @@ class sessionController {
                 commentaireKine : req.body.commentaireKine,
                 commentairePatient : req.body.commentairePatient,
                 userId : req.body.userId,
-                data : req.body.data
+                dataAngle : req.body.dataAngle,
+                dataPoids :req.body.dataPoids
             });
 
             newSession.save((err) => {
