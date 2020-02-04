@@ -21,7 +21,9 @@ class Home extends Component {
             dataPoids: [],
             dataAngle: [],
             startTime: 0,
-            endTime: 0, 
+            endTime: 0,
+            comKine: '',
+            comPatient: '',
         };
     }
 
@@ -31,9 +33,9 @@ class Home extends Component {
         socket.on('nouveau poids', (data) => {
             if ((data.poids / this.state.poids_max * 100) < 105) {
                 this.setState({
-                    poids: Math.round(data.poids) ,
+                    poids: Math.round(data.poids),
                 })
-                if( this.state.isRecording ){
+                if (this.state.isRecording) {
                     this.setState({
                         dataPoids: this.state.dataPoids.concat([data.poids]),
                     })
@@ -46,7 +48,7 @@ class Home extends Component {
                 this.setState({
                     angle: Math.round(data.angle),
                 })
-                if( this.state.isRecording ){
+                if (this.state.isRecording) {
                     this.setState({
                         dataAngle: this.state.dataAngle.concat([data.angle]),
                     })
@@ -54,31 +56,31 @@ class Home extends Component {
             }
         })
     }
-    
+
     formPatient() {
         return (
             <Row className="mt-4 w-100">
-                    <Form className="w-100">
-                        <Form.Group>
-                                    <Row>
-                                        <Col md={6}>
-                                            <Form.Label>Ressenti patient</Form.Label>
-                                            <Form.Control type="text" />
-                                        </Col>
-                                        <Col md={6}>
-                                            <Form.Label>Commentaires</Form.Label>
-                                            <Form.Control type="text" />
-                                        </Col>
-                                    </Row>
-                        </Form.Group>
-                        <Button variant="primary" type="submit" onClick={() => this.stopSession("il faut","le faire")}>
-                                    Enregistrer
+                <Form className="w-100">
+                    <Form.Group>
+                        <Row>
+                            <Col md={6}>
+                                <Form.Label>Ressenti patient</Form.Label>
+                                <Form.Control type="text" onChange={(e) => this.setState({ comPatient: e.target.value })} />
+                            </Col>
+                            <Col md={6}>
+                                <Form.Label>Commentaires</Form.Label>
+                                <Form.Control type="text" onChange={(e) => this.setState({ comKine: e.target.value })} />
+                            </Col>
+                        </Row>
+                    </Form.Group>
+                    <Button variant="primary" type="submit" onClick={() => this.stopSession()}>
+                        Enregistrer
                                 </Button>
-                    </Form>
+                </Form>
             </Row>
         );
     }
-    
+
     startSession() {
         this.setState({
             formDisplay: true,
@@ -88,39 +90,41 @@ class Home extends Component {
             dataPoids: [],
         })
     }
-                    
-    stopSession = async (comKine,comPatient) =>  {
+
+    stopSession = async () => {
         this.setState({
             formDisplay: false,
             isRecording: false,
             endTime: Date.now(),
         })
-        
+
         const payload = {
             appareil: "angle et poids",
             debut: this.state.startTime,
             fin: this.state.endTime,
-            commentaireKine : comKine,
-            commentairePatient : comPatient,
-            userId : this.state.patient._id,
-            dataAngle : this.state.dataAngle,
-            dataPoids : this.state.dataPoids
+            commentaireKine: this.state.comKine,
+            commentairePatient: this.state.comPatient,
+            userId: this.state.patient._id,
+            dataAngle: this.state.dataAngle,
+            dataPoids: this.state.dataPoids
         }
-        
+
         await api.insertSession(qs.stringify(payload)).then(resp => {
             if (resp.data.success) {
-                //window.location.reload();
+                this.setState({
+                    comKine: '',
+                    comPatient: '',
+                })
             } else alert(resp.data.msg)
         })
     }
-                      
-    
+
     render() {
         return (
             <Container>
                 <Row className="w-100 mt-2">
                     {this.state.session ? <Badge variant="light" className="ml-auto">{this.state.patient.nom} {this.state.patient.prenom}</Badge> : null}
-                    
+
                 </Row>
                 <Row>
                     <Col className="text-center">
@@ -136,7 +140,7 @@ class Home extends Component {
                 </Row>
                 <Row className="mt-4">
                     <Col className="mt-4 text-center">
-                        {this.state.session ? <Button onClick={()=>this.startSession()}>Enregistrer session</Button> : null}
+                        {this.state.session ? <Button onClick={() => this.startSession()}>Enregistrer session</Button> : null}
                     </Col>
                 </Row>
                 {this.state.formDisplay ? this.formPatient() : null}

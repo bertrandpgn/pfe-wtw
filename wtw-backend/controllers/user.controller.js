@@ -1,6 +1,5 @@
 var User = require("../model/user.model");
 var Session = require("../model/session.model");
-const querystring = require('querystring');
 
 
 class userController {

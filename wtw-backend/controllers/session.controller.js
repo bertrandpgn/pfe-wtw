@@ -1,7 +1,5 @@
 var User = require("../model/user.model");
 var Session = require("../model/session.model");
-const querystring = require('querystring');
-
 
 class sessionController {
     create(req, res) {
@@ -37,6 +35,18 @@ class sessionController {
 
             if (!sessions) {
                 res.status(404).send({success: false, msg: 'Aucune session trouvée'});
+            } else {
+                res.json(sessions);
+            }
+        });
+    }
+
+    readAll(req, res) {
+        Session.find({}, (err, sessions) => {
+            if (err) throw err;
+
+            if (!sessions) {
+                res.status(404).send({ success: false, msg: 'Aucun user trouvé' });
             } else {
                 res.json(sessions);
             }

@@ -10,7 +10,7 @@ router.get('/api/user/:id',userController.readOne);
 router.delete('/api/user/:id',userController.delete);
 
 router.post('/api/session',sessionController.create);
+router.get('/api/session',sessionController.readAll);
 router.get('/api/session/:id',sessionController.readForOneUser);
-
 
 module.exports = router;
