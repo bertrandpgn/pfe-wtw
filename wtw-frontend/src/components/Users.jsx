@@ -31,7 +31,6 @@ class Users extends Component {
             patient: user,
             sessions: []
         })
-        console.log(user._id)
         await api.getSession(user._id).then(resp => {
             resp.data.map(session => this.setState(prevState => ({
                 sessions: [...prevState.sessions, session]
@@ -46,7 +45,7 @@ class Users extends Component {
             <Container className="mt-4">
                 <h1>{this.state.patient.nom} {this.state.patient.prenom}</h1>
                 <hr />
-                {this.state.sessions.map(session => this.sessionPatient(session))}
+                {this.state.sessions.map(session => (session.dataAngle || session.dataPoids) ? this.sessionPatient(session) : null)}
 
                 <Row className="mt-4 w-100">
                     <Button variant="danger" className="ml-auto"
@@ -63,18 +62,18 @@ class Users extends Component {
     }
 
     sessionPatient = session => {
+        const dateDebut = new Date(session.debut)
+        //const dateFin = new Date(session.fin)
+
         var options = {
             chart: {
                 zoom: {
                     enabled: false
-                }
-            },
-            xaxis: {
-                categories: [session.debut, session.fin]
+                },
             },
             title: {
-                text: session.debut,
-                align: 'left'
+                text: `Session du : ${dateDebut.getDay()}/${dateDebut.getMonth()}/${dateDebut.getFullYear()}`,
+                align: 'left',
             },
         };
 
@@ -86,10 +85,11 @@ class Users extends Component {
             data: session.dataPoids
         }]
 
-        console.log("session " + session.dataAngle)
         return (
-            <Row className="w-100" key={session.debut}>
+            <Row className="w-100 mt-4" key={session.debut}>
                 <LineChart series={series} options={options} />
+                {session.commentaireKine ?  <Container><p><b>Commentaire Kiné: </b>{session.commentaireKine}</p></Container> : null}
+                {session.commentairePatient ?  <Container><p><b>Ressenti Patient: </b>{session.commentairePatient}</p></Container> : null}
             </Row>
         )
     }

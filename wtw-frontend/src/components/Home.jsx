@@ -127,12 +127,12 @@ class Home extends Component {
 
                 </Row>
                 <Row>
-                    <Col className="text-center">
+                    <Col sm={12} md={6} className="text-center">
                         <GradientChart series={[(this.state.poids / this.state.poids_max) * 100 - 5]} value={this.state.poids} labels={["Poids"]} />
                         <br />
                         <h4 className="mt-4">Limite: {this.state.poids_max}kg</h4>
                     </Col>
-                    <Col className="text-center">
+                    <Col sm={12} md={6} className="text-center">
                         <GradientChart series={[(this.state.angle / this.state.angle_max) * 100]} value={this.state.angle} labels={["Angle"]} />
                         <br />
                         <h4 className="mt-4">Limite: {this.state.angle_max}°</h4>
