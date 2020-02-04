@@ -71,7 +71,7 @@ class Home extends Component {
                                         </Col>
                                     </Row>
                         </Form.Group>
-                        <Button variant="primary" type="submit" onClick={() => this.stopSession()}>
+                        <Button variant="primary" type="submit" onClick={() => this.stopSession("il faut","le faire")}>
                                     Enregistrer
                                 </Button>
                     </Form>
@@ -103,12 +103,13 @@ class Home extends Component {
             commentaireKine : comKine,
             commentairePatient : comPatient,
             userId : this.state.patient._id,
-            data : this.state.dataPoids
+            dataAngle : this.state.dataAngle,
+            dataPoids : this.state.dataPoids
         }
         
         await api.insertSession(qs.stringify(payload)).then(resp => {
             if (resp.data.success) {
-                window.location.reload();
+                //window.location.reload();
             } else alert(resp.data.msg)
         })
     }
