@@ -11,11 +11,15 @@ class Home extends Component {
         super(props, context);
         this.state = {
             poids: 0,
+            poids_pour: 0,
             poids_max: context.state.poids_max,
             angle: 0,
+            angle_pour: 0,
             angle_max: context.state.angle_max,
             session: context.state.session,
             patient: context.state.patient,
+            isSessionPoids: false,
+            isSessionAngle: false,
             formDisplay: false,
             isRecording: false,
             dataPoids: [],
@@ -31,9 +35,14 @@ class Home extends Component {
         const socket = socketIOClient(process.env.REACT_APP_URL)
 
         socket.on('nouveau poids', (data) => {
-            if ((data.poids / this.state.poids_max * 100) < 105) {
+            if (data.poids >= 0) {
+                var pourcentPoids
+                if(data.poids <= this.state.poids_max)
+                    pourcentPoids = data.poids / this.state.poids_max * 100;
+                else pourcentPoids = 100;
                 this.setState({
                     poids: Math.round(data.poids),
+                    poids_pour: pourcentPoids
                 })
                 if (this.state.isRecording) {
                     this.setState({
@@ -44,17 +53,21 @@ class Home extends Component {
         })
 
         socket.on('nouvel angle', (data) => {
-            if ((data.angle / this.state.angle_max * 100) < 105) {
+            var pourcentAngle
+            if(data.angle <= this.state.angle_max)
+                pourcentAngle = data.angle / this.state.angle_max * 100;
+            else pourcentAngle = 100;
+            this.setState({
+                angle: Math.round(data.angle),
+                angle_pour: pourcentAngle
+            })
+            if (this.state.isRecording) {
                 this.setState({
-                    angle: Math.round(data.angle),
+                    dataAngle: this.state.dataAngle.concat([data.angle]),
                 })
-                if (this.state.isRecording) {
-                    this.setState({
-                        dataAngle: this.state.dataAngle.concat([data.angle]),
-                    })
-                }
             }
         })
+
     }
 
     formPatient() {
@@ -98,15 +111,33 @@ class Home extends Component {
             endTime: Date.now(),
         })
 
+        var _appareil
+        var _dataAngle
+        var _dataPoids
+        
+        if(this.state.isSessionPoids && this.state.isSessionAngle){
+            _appareil = "Poids et angle"
+            _dataAngle = this.state.dataAngle
+            _dataPoids = this.state.dataPoids
+        } else if (this.state.isSessionPoids){
+            _appareil = "Poids"
+            _dataAngle = []
+            _dataPoids = this.state.dataPoids
+        } else if (this.state.isSessionAngle){
+            _appareil = "Angle"
+            _dataAngle = this.state.dataAngle
+            _dataPoids = []
+        }
+        
         const payload = {
-            appareil: "angle et poids",
+            appareil: _appareil,
             debut: this.state.startTime,
             fin: this.state.endTime,
             commentaireKine: this.state.comKine,
             commentairePatient: this.state.comPatient,
             userId: this.state.patient._id,
-            dataAngle: this.state.dataAngle,
-            dataPoids: this.state.dataPoids
+            dataAngle: _dataAngle,
+            dataPoids: _dataPoids
         }
 
         await api.insertSession(qs.stringify(payload)).then(resp => {
@@ -128,14 +159,16 @@ class Home extends Component {
                 </Row>
                 <Row>
                     <Col sm={12} md={6} className="text-center">
-                        <GradientChart series={[(this.state.poids / this.state.poids_max) * 100 - 5]} value={this.state.poids} labels={["Poids"]} />
+                        <GradientChart series={[this.state.poids_pour]} value={this.state.poids} labels={["Poids"]} />
                         <br />
                         <h4 className="mt-4">Limite: {this.state.poids_max}kg</h4>
+                        {this.state.session ? <input type="checkbox" label="Enregistrer" onClick={() => this.setState({ isSessionPoids : !this.state.isSessionPoids})}/> : null}
                     </Col>
                     <Col sm={12} md={6} className="text-center">
-                        <GradientChart series={[(this.state.angle / this.state.angle_max) * 100]} value={this.state.angle} labels={["Angle"]} />
+                        <GradientChart series={[this.state.angle_pour]} value={this.state.angle} labels={["Angle"]} />
                         <br />
                         <h4 className="mt-4">Limite: {this.state.angle_max}°</h4>
+                        {this.state.session ? <input type="checkbox" label="Enregistrer" onClick={() => this.setState({ isSessionAngle : !this.state.isSessionAngle})}/> : null}
                     </Col>
                 </Row>
                 <Row className="mt-4">
