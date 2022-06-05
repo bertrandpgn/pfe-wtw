@@ -19,7 +19,7 @@ services:
       - 4001:4001
   
   front:
-    image: cake1234/wtw-frontend:1.0.4
+    image: cake1234/wtw-frontend:1.0.5
     container_name: 'wtw-frontend'
     depends_on:
       - "back"

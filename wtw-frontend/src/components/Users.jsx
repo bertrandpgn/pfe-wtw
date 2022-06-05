@@ -63,8 +63,7 @@ class Users extends Component {
 
     sessionPatient = session => {
         const dateDebut = new Date(session.debut)
-        //const dateFin = new Date(session.fin)
-
+        
         var options = {
             chart: {
                 zoom: {

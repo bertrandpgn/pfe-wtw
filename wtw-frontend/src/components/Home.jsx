@@ -87,7 +87,7 @@ class Home extends Component {
                         </Row>
                     </Form.Group>
                     <Button variant="primary" type="submit" onClick={() => this.stopSession()}>
-                        Enregistrer
+                        Envoyer
                                 </Button>
                 </Form>
             </Row>
@@ -162,18 +162,18 @@ class Home extends Component {
                         <GradientChart series={[this.state.poids_pour]} value={this.state.poids} labels={["Poids"]} />
                         <br />
                         <h4 className="mt-4">Limite: {this.state.poids_max}kg</h4>
-                        {this.state.session ? <input type="checkbox" label="Enregistrer" onClick={() => this.setState({ isSessionPoids : !this.state.isSessionPoids})}/> : null}
+                        {this.state.session ? <div><input type="checkbox" onClick={() => this.setState({ isSessionPoids : !this.state.isSessionPoids})}/><span> Sélectionner</span></div> : null}
                     </Col>
                     <Col sm={12} md={6} className="text-center">
                         <GradientChart series={[this.state.angle_pour]} value={this.state.angle} labels={["Angle"]} />
                         <br />
                         <h4 className="mt-4">Limite: {this.state.angle_max}°</h4>
-                        {this.state.session ? <input type="checkbox" label="Enregistrer" onClick={() => this.setState({ isSessionAngle : !this.state.isSessionAngle})}/> : null}
+                        {this.state.session ? <div><input type="checkbox" onClick={() => this.setState({ isSessionAngle : !this.state.isSessionAngle})}/><span> Sélectionner</span></div>  : null}
                     </Col>
                 </Row>
                 <Row className="mt-4">
                     <Col className="mt-4 text-center">
-                        {this.state.session ? <Button onClick={() => this.startSession()}>Enregistrer session</Button> : null}
+                        {this.state.session ? <Button disabled={this.state.isRecording} onClick={() => this.startSession()} >Enregistrer session</Button> : null}
                     </Col>
                 </Row>
                 {this.state.formDisplay ? this.formPatient() : null}
